@@ -1,0 +1,6 @@
+Contact: mailto:security@webit.agency
+Expires: 2027-01-01T00:00:00.000Z
+Encryption: https://webit.agency/pgp-key.txt
+Acknowledgments: https://webit.agency/hall-of-fame
+Preferred-Languages: en
+Canonical: https://webit.agency/.well-known/security.txt

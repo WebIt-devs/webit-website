@@ -84,56 +84,17 @@ export default function Careers() {
           </div>
         </section>
 
-        {/* Job listings */}
-        <section className="px-6 lg:px-12 max-w-5xl mx-auto mb-24">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
-            <h2 className="font-headline text-2xl font-bold text-on-surface">Open Roles</h2>
-            <span className="text-xs font-mono px-3 py-1 rounded-full border border-[#00e297]/30 text-[#00e297] w-fit">{jobs.length} positions open</span>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {jobs.map((job, i) => (
-              <motion.div key={i}
-                whileHover={{ 
-                  y: -6, 
-                  scale: 1.01,
-                  borderColor: `${job.deptColor}40`,
-                  boxShadow: `0 12px 40px ${job.deptColor}15`
-                }}
-                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                className="group relative rounded-2xl p-8 border transition-colors cursor-pointer"
-                style={{
-                  backgroundColor: 'rgba(255,255,255,0.02)',
-                  borderColor: 'rgba(255,255,255,0.07)',
-                }}
-              >
-                {/* Top row */}
-                <div className="flex items-start justify-between mb-6">
-                  <span className="px-3 py-1 rounded-full text-xs font-bold border"
-                    style={{ color: job.deptColor, borderColor: `${job.deptColor}30`, backgroundColor: `${job.deptColor}10` }}>
-                    {job.dept}
-                  </span>
-                  <div className="w-9 h-9 rounded-xl border border-white/5 flex items-center justify-center group-hover:scale-110 transition-transform"
-                    style={{ backgroundColor: `${job.deptColor}12` }}>
-                    <span className="material-symbols-outlined text-sm" style={{ color: job.deptColor, fontSize: 16 }}>arrow_outward</span>
-                  </div>
-                </div>
-
-                <h3 className="font-headline text-2xl md:text-xl font-bold mb-2 text-on-surface leading-tight">{job.title}</h3>
-                <p className="text-xs text-on-surface-variant uppercase tracking-widest mb-4 font-mono">{job.location}</p>
-                <p className="text-sm md:text-base text-on-surface-variant leading-relaxed mb-6">{job.desc}</p>
-
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2 pt-5 border-t border-white/5">
-                  {job.tags.map(tag => (
-                    <span key={tag} className="px-3 py-1 rounded-lg text-[10px] md:text-xs font-bold uppercase tracking-wider text-on-surface-variant border border-white/5"
-                      style={{ backgroundColor: 'rgba(255,255,255,0.03)' }}>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
+        {/* Job listings (Currently paused) */}
+        <section className="px-6 lg:px-12 max-w-3xl mx-auto mb-24 text-center">
+          <div className="rounded-3xl p-12 md:p-20 border border-white/5 relative overflow-hidden"
+              style={{ backgroundColor: 'rgba(255,255,255,0.02)' }}>
+            <div className="absolute inset-0 pointer-events-none"
+              style={{ background: 'radial-gradient(ellipse at center, rgba(0,226,151,0.05) 0%, transparent 60%)' }} />
+            <span className="material-symbols-outlined text-[#00e297] text-6xl mb-6 opacity-80">hourglass_empty</span>
+            <h2 className="font-headline text-3xl md:text-5xl font-extrabold text-on-surface mb-6">Stay Tuned.</h2>
+            <p className="text-on-surface-variant text-lg leading-relaxed max-w-xl mx-auto">
+              We aren't actively hiring for specific roles at this exact moment, but new opportunities will be posted soon. We are always on the lookout for exceptional talent.
+            </p>
           </div>
         </section>
 

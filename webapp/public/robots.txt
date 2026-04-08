@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://webit-site.vercel.app/sitemap.xml

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Navbar from '../components/Navbar';
@@ -14,6 +14,23 @@ const pageVariants = {
 
 
 export default function Home() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const scrollRef = useRef(null);
+
+  const handleScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const scrollLeft = el.scrollLeft;
+    const width = el.offsetWidth;
+    const index = Math.round(scrollLeft / (width * 0.78));
+    setActiveIndex(index);
+  };
+
+  const getCardStyle = (index) => ({
+    scale: activeIndex === index ? 1 : 0.94,
+    opacity: activeIndex === index ? 1 : 0.6,
+  });
+
   const [heroRef, heroInView] = useInView({ threshold: 0.1 });
   const [stackRef, stackInView] = useInView({ threshold: 0.1 });
   const [cyberRef, cyberInView] = useInView({ threshold: 0.1 });
@@ -84,13 +101,20 @@ export default function Home() {
           {/* --- MOBILE CAROUSEL --- */}
           <div className="md:hidden relative mb-12 -mx-6">
             {/* Swipe fade gradient */}
-            <div className="absolute right-0 top-0 h-[340px] w-12 bg-gradient-to-l from-background to-transparent pointer-events-none z-10" />
+            <div className="absolute right-0 top-0 h-full w-12 bg-gradient-to-l from-background to-transparent pointer-events-none z-10" />
             
-            <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 px-6 pb-6 hide-scrollbar scroll-smooth [-webkit-overflow-scrolling:touch]">
+            <div 
+              ref={scrollRef}
+              onScroll={handleScroll}
+              className="flex overflow-x-auto snap-x gap-4 pl-6 pr-4 pb-6 hide-scrollbar scroll-smooth [-webkit-overflow-scrolling:touch]"
+              style={{ scrollSnapType: 'x mandatory' }}
+            >
               {/* React Card */}
               <motion.div 
+                animate={getCardStyle(0)}
+                transition={{ duration: 0.3 }}
                 whileTap={{ scale: 0.98 }}
-                className="snap-center shrink-0 w-[82%] min-h-[340px] rounded-3xl p-6 bg-surface-container-low border border-white/5 flex flex-col justify-between"
+                className="snap-start shrink-0 w-[78%] sm:w-[70%] min-h-[340px] rounded-3xl p-6 bg-surface-container-low border border-white/5 flex flex-col justify-between active:scale-95 transition-transform duration-150"
               >
                 <div>
                   <div className="w-14 h-14 rounded-2xl bg-primary-container/20 flex items-center justify-center mb-6">
@@ -101,16 +125,18 @@ export default function Home() {
                   <p className="text-sm leading-6 text-on-surface-variant">Optimized for SSR, ultra-fast performance, and seamless content delivery.</p>
                 </div>
                 <div className="flex flex-wrap gap-2 mt-6">
-                  <span className="px-3 py-1 rounded-lg bg-surface text-[10px] font-mono">Tailwind</span>
-                  <span className="px-3 py-1 rounded-lg bg-surface text-[10px] font-mono">TypeScript</span>
-                  <span className="px-3 py-1 rounded-lg bg-surface text-[10px] font-mono">Vercel</span>
+                  <span className="px-6 py-1 rounded-lg bg-surface text-[10px] font-mono">Tailwind</span>
+                  <span className="px-6 py-1 rounded-lg bg-surface text-[10px] font-mono">TypeScript</span>
+                  <span className="px-6 py-1 rounded-lg bg-surface text-[10px] font-mono">Vercel</span>
                 </div>
               </motion.div>
 
               {/* Product Card */}
               <motion.div 
+                animate={getCardStyle(1)}
+                transition={{ duration: 0.3 }}
                 whileTap={{ scale: 0.98 }}
-                className="snap-center shrink-0 w-[82%] min-h-[340px] rounded-3xl p-6 bg-surface-container-highest border border-white/5 flex flex-col justify-between"
+                className="snap-start shrink-0 w-[78%] sm:w-[70%] min-h-[340px] rounded-3xl p-6 bg-surface-container-highest border border-white/5 flex flex-col justify-between active:scale-95 transition-transform duration-150"
               >
                 <div>
                   <div className="w-14 h-14 rounded-2xl bg-tertiary-container/30 flex items-center justify-center mb-6 border border-tertiary/20">
@@ -127,8 +153,10 @@ export default function Home() {
 
               {/* Flutter Card */}
               <motion.div 
+                animate={getCardStyle(2)}
+                transition={{ duration: 0.3 }}
                 whileTap={{ scale: 0.98 }}
-                className="snap-center shrink-0 w-[82%] min-h-[340px] rounded-3xl p-6 relative overflow-hidden flex flex-col justify-between"
+                className="snap-start shrink-0 w-[78%] sm:w-[70%] min-h-[340px] rounded-3xl p-6 relative overflow-hidden flex flex-col justify-between active:scale-95 transition-transform duration-150"
                 style={{ background: 'linear-gradient(160deg, #1a0f6e 0%, #2a14b4 50%, #4338ca 100%)' }}
               >
                 <div className="relative z-10">
@@ -147,8 +175,10 @@ export default function Home() {
 
               {/* Go Card */}
               <motion.div 
+                animate={getCardStyle(3)}
+                transition={{ duration: 0.3 }}
                 whileTap={{ scale: 0.98 }}
-                className="snap-center shrink-0 w-[82%] min-h-[340px] rounded-3xl p-6 flex flex-col justify-between border border-outline-variant/10"
+                className="snap-start shrink-0 w-[78%] sm:w-[70%] min-h-[340px] rounded-3xl p-6 flex flex-col justify-between border border-outline-variant/10 active:scale-95 transition-transform duration-150"
                 style={{ background: 'linear-gradient(160deg, #1a2614 0%, #2a3a1e 50%, #3d4b30 100%)' }}
               >
                 <div>
@@ -167,10 +197,14 @@ export default function Home() {
 
             {/* Pagination Dots */}
             <div className="flex justify-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-primary mb-1"></span>
-              <span className="w-2 h-2 rounded-full bg-white/20 mb-1"></span>
-              <span className="w-2 h-2 rounded-full bg-white/20 mb-1"></span>
-              <span className="w-2 h-2 rounded-full bg-white/20 mb-1"></span>
+              {[0, 1, 2, 3].map((i) => (
+                <span
+                  key={i}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 mb-1 ${
+                    activeIndex === i ? 'bg-primary scale-125' : 'bg-primary/20'
+                  }`}
+                />
+              ))}
             </div>
           </div>
 

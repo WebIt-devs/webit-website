@@ -249,6 +249,15 @@ a, button, input, textarea, select {
 .delay-800  { transition-delay: 800ms !important; }
 
 @layer utilities {
+    /* ── Hide Scrollbar ── */
+    .hide-scrollbar {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none; /* Chrome, Safari and Opera */
+    }
+
     /* ── Marquee Animation ── */
     @keyframes marquee {
         0% { transform: translateX(0%); }

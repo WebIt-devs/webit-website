@@ -194,7 +194,7 @@ export default function Solutions() {
             </div>
 
             {/* Tab Content Display */}
-            <div className={`relative min-h-[400px] rounded-[32px] overflow-hidden border border-white/10 reveal delay-300 ${tabsInView ? 'in-view' : ''}`}>
+            <div className={`relative h-[550px] md:h-[450px] lg:h-[400px] rounded-[32px] overflow-hidden border border-white/10 reveal delay-300 ${tabsInView ? 'in-view' : ''}`}>
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeTab.id}

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Navbar from '../components/Navbar';
@@ -80,27 +81,121 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* --- MOBILE CAROUSEL --- */}
+          <div className="md:hidden relative mb-12 -mx-6">
+            {/* Swipe fade gradient */}
+            <div className="absolute right-0 top-0 h-[340px] w-12 bg-gradient-to-l from-background to-transparent pointer-events-none z-10" />
+            
+            <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 px-6 pb-6 hide-scrollbar scroll-smooth [-webkit-overflow-scrolling:touch]">
+              {/* React Card */}
+              <motion.div 
+                whileTap={{ scale: 0.98 }}
+                className="snap-center shrink-0 w-[82%] min-h-[340px] rounded-3xl p-6 bg-surface-container-low border border-white/5 flex flex-col justify-between"
+              >
+                <div>
+                  <div className="w-14 h-14 rounded-2xl bg-primary-container/20 flex items-center justify-center mb-6">
+                    <span className="material-symbols-outlined text-primary text-2xl">javascript</span>
+                  </div>
+                  <span className="inline-flex px-3 py-1 rounded-full bg-white/5 text-[10px] uppercase tracking-wider mb-4 font-bold">Frontend</span>
+                  <h3 className="font-headline text-2xl font-extrabold mb-3 text-on-surface">React & Next.js</h3>
+                  <p className="text-sm leading-6 text-on-surface-variant">Optimized for SSR, ultra-fast performance, and seamless content delivery.</p>
+                </div>
+                <div className="flex flex-wrap gap-2 mt-6">
+                  <span className="px-3 py-1 rounded-lg bg-surface text-[10px] font-mono">Tailwind</span>
+                  <span className="px-3 py-1 rounded-lg bg-surface text-[10px] font-mono">TypeScript</span>
+                  <span className="px-3 py-1 rounded-lg bg-surface text-[10px] font-mono">Vercel</span>
+                </div>
+              </motion.div>
+
+              {/* Product Card */}
+              <motion.div 
+                whileTap={{ scale: 0.98 }}
+                className="snap-center shrink-0 w-[82%] min-h-[340px] rounded-3xl p-6 bg-surface-container-highest border border-white/5 flex flex-col justify-between"
+              >
+                <div>
+                  <div className="w-14 h-14 rounded-2xl bg-tertiary-container/30 flex items-center justify-center mb-6 border border-tertiary/20">
+                    <span className="material-symbols-outlined text-tertiary text-2xl">handyman</span>
+                  </div>
+                  <span className="inline-flex px-3 py-1 rounded-full bg-white/5 text-[10px] uppercase tracking-wider mb-4 font-bold text-tertiary">Product</span>
+                  <h3 className="font-headline text-2xl font-extrabold mb-3 text-on-surface">Product Strategy</h3>
+                  <p className="text-sm leading-6 text-on-surface-variant">We align code with UX/UI to build products that perfectly serve the user.</p>
+                </div>
+                <div className="w-full h-24 mt-6">
+                  <img className="rounded-xl shadow-lg w-full h-full object-cover grayscale opacity-80 mix-blend-luminosity" alt="designer drafting wireframes" src="https://images.unsplash.com/photo-1618761714954-0b8cd0026356?auto=format&fit=crop&q=80&w=600" />
+                </div>
+              </motion.div>
+
+              {/* Flutter Card */}
+              <motion.div 
+                whileTap={{ scale: 0.98 }}
+                className="snap-center shrink-0 w-[82%] min-h-[340px] rounded-3xl p-6 relative overflow-hidden flex flex-col justify-between"
+                style={{ background: 'linear-gradient(160deg, #1a0f6e 0%, #2a14b4 50%, #4338ca 100%)' }}
+              >
+                <div className="relative z-10">
+                  <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mb-6 backdrop-blur-sm border border-white/10">
+                    <span className="material-symbols-outlined text-white text-2xl">phone_iphone</span>
+                  </div>
+                  <span className="inline-flex px-3 py-1 rounded-full bg-black/20 text-white text-[10px] uppercase tracking-wider mb-4 backdrop-blur-sm font-bold">Mobile</span>
+                  <h3 className="font-headline text-2xl font-extrabold mb-3 text-white">Native Flutter</h3>
+                  <p className="text-sm leading-6 text-white/75">Single codebase, beautiful cross-platform performance across iOS and Android.</p>
+                </div>
+                <div className="pt-6 relative z-10 mt-auto">
+                  <span className="material-symbols-outlined text-4xl text-white/20">terminal</span>
+                </div>
+                <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-white/5 rounded-full blur-xl"></div>
+              </motion.div>
+
+              {/* Go Card */}
+              <motion.div 
+                whileTap={{ scale: 0.98 }}
+                className="snap-center shrink-0 w-[82%] min-h-[340px] rounded-3xl p-6 flex flex-col justify-between border border-outline-variant/10"
+                style={{ background: 'linear-gradient(160deg, #1a2614 0%, #2a3a1e 50%, #3d4b30 100%)' }}
+              >
+                <div>
+                  <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mb-6 border border-white/5">
+                    <span className="material-symbols-outlined text-[#bbcca9] text-2xl">dns</span>
+                  </div>
+                  <span className="inline-flex px-3 py-1 rounded-full bg-black/20 text-[#bbcca9] text-[10px] uppercase tracking-wider mb-4 backdrop-blur-sm font-bold">Backend</span>
+                  <h3 className="font-headline text-2xl font-extrabold mb-3 text-[#d7e8c4]">Go Backend</h3>
+                  <p className="text-sm leading-6 text-[#a1b091]">Concurrency by design. Our Go backends handle millions of requests with minimal overhead.</p>
+                </div>
+                <div className="flex mt-6 gap-2">
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-white/5 text-[10px] text-[#bbcca9] font-mono"><span className="material-symbols-outlined text-[14px]">memory</span> Microservices</span>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Pagination Dots */}
+            <div className="flex justify-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-primary mb-1"></span>
+              <span className="w-2 h-2 rounded-full bg-white/20 mb-1"></span>
+              <span className="w-2 h-2 rounded-full bg-white/20 mb-1"></span>
+              <span className="w-2 h-2 rounded-full bg-white/20 mb-1"></span>
+            </div>
+          </div>
+
+          {/* --- DESKTOP BENTO GRID --- */}
+          <div className="hidden md:grid grid-cols-3 gap-8">
             {/* React Card */}
             <motion.div 
               whileHover={{ y: -8, scale: 1.01 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className={`md:col-span-2 bg-surface-container-low rounded-xl p-10 hover:shadow-2xl hover:shadow-primary/10 border border-transparent hover:border-primary/20 transition-all duration-300 reveal delay-100 cursor-pointer ${stackInView ? 'in-view' : ''}`}
+              className={`col-span-2 bg-surface-container-low rounded-xl p-10 flex flex-col hover:shadow-2xl hover:shadow-primary/10 border border-transparent hover:border-primary/20 transition-all duration-300 reveal delay-100 cursor-pointer ${stackInView ? 'in-view' : ''}`}
             >
               <div className="flex items-start justify-between mb-12">
                 <div className="w-16 h-16 bg-primary-container/20 rounded-2xl flex items-center justify-center">
                   <span className="material-symbols-outlined text-primary text-3xl">javascript</span>
                 </div>
-                <span className="px-4 py-2 bg-surface-container-lowest rounded-full text-xs font-bold shadow-sm text-on-surface">Reactive Web Architecture</span>
+                <span className="px-4 py-2 bg-surface-container-lowest rounded-full text-xs font-bold shadow-sm text-on-surface whitespace-nowrap">Frontend</span>
               </div>
               <h3 className="font-headline text-3xl font-extrabold mb-4">React & Next.js Elite</h3>
-              <p className="text-on-surface-variant text-lg leading-relaxed mb-8">
+              <p className="text-on-surface-variant text-lg leading-relaxed mb-8 flex-1">
                 Optimized for SSR, ultra-fast loading states, and dynamic content delivery that feels instantaneous.
               </p>
-              <div className="flex gap-4">
-                <span className="px-3 py-1 bg-surface rounded-md text-xs font-mono">TailwindCSS</span>
-                <span className="px-3 py-1 bg-surface rounded-md text-xs font-mono">TypeScript</span>
-                <span className="px-3 py-1 bg-surface rounded-md text-xs font-mono">Vercel</span>
+              <div className="flex flex-wrap gap-3 mt-auto">
+                <span className="px-3 py-1 bg-surface rounded-md text-xs font-mono border border-white/5">TailwindCSS</span>
+                <span className="px-3 py-1 bg-surface rounded-md text-xs font-mono border border-white/5">TypeScript</span>
+                <span className="px-3 py-1 bg-surface rounded-md text-xs font-mono border border-white/5">Vercel</span>
               </div>
             </motion.div>
 
@@ -111,12 +206,15 @@ export default function Home() {
               className={`rounded-xl p-10 flex flex-col justify-between relative overflow-hidden reveal delay-200 cursor-pointer hover:shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300 ${stackInView ? 'in-view' : ''}`} 
               style={{ background: 'linear-gradient(160deg, #1a0f6e 0%, #2a14b4 50%, #4338ca 100%)' }}
             >
-              <div className="relative z-10">
-                <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mb-12 backdrop-blur-sm">
-                  <span className="material-symbols-outlined text-white text-3xl">phone_iphone</span>
-                </div>
-                <h3 className="font-headline text-3xl font-extrabold mb-4 text-white">Native Flutter</h3>
-                <p className="text-white/75 text-lg leading-relaxed">
+              <div className="flex items-start justify-between relative z-10 mb-8">
+                  <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-sm border border-white/10">
+                    <span className="material-symbols-outlined text-white text-3xl">phone_iphone</span>
+                  </div>
+                  <span className="px-4 py-2 bg-black/20 rounded-full text-xs font-bold shadow-sm text-white whitespace-nowrap backdrop-blur-sm">Mobile</span>
+              </div>
+              <div className="relative z-10 flex-1 flex flex-col">
+                <h3 className="font-headline text-3xl font-extrabold mb-4 text-white mt-auto">Native Flutter</h3>
+                <p className="text-white/75 text-lg leading-relaxed mb-8">
                   Single codebase, beautiful cross-platform performance across iOS and Android.
                 </p>
               </div>
@@ -130,20 +228,21 @@ export default function Home() {
             <motion.div 
               whileHover={{ y: -8, scale: 1.01 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className={`rounded-xl p-10 transition-all duration-300 border border-outline-variant/10 reveal delay-300 cursor-pointer hover:shadow-2xl hover:shadow-[#3d4b30]/30 hover:border-[#bbcca9]/30 ${stackInView ? 'in-view' : ''}`} 
+              className={`rounded-xl p-10 flex flex-col transition-all duration-300 border border-outline-variant/10 reveal delay-300 cursor-pointer hover:shadow-2xl hover:shadow-[#3d4b30]/30 hover:border-[#bbcca9]/30 ${stackInView ? 'in-view' : ''}`} 
               style={{ background: 'linear-gradient(160deg, #1a2614 0%, #2a3a1e 50%, #3d4b30 100%)' }}
             >
-              <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mb-12">
-                <span className="material-symbols-outlined text-[#bbcca9] text-3xl">dns</span>
+              <div className="flex items-start justify-between mb-8">
+                <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center border border-white/5">
+                  <span className="material-symbols-outlined text-[#bbcca9] text-3xl">dns</span>
+                </div>
+                <span className="px-4 py-2 bg-black/20 rounded-full text-xs font-bold shadow-sm text-[#bbcca9] whitespace-nowrap backdrop-blur-sm">Backend</span>
               </div>
-              <h3 className="font-headline text-3xl font-extrabold mb-4 text-[#d7e8c4]">Go Backend</h3>
-              <p className="text-[#a1b091] text-lg leading-relaxed mb-8">
+              <h3 className="font-headline text-3xl font-extrabold mb-4 text-[#d7e8c4] mt-auto">Go Backend</h3>
+              <p className="text-[#a1b091] text-lg leading-relaxed mb-8 flex-1">
                 Concurrency by design. Our Go backends handle millions of requests with minimal overhead.
               </p>
-              <div className="flex gap-2">
-                <div className="w-2 h-2 rounded-full bg-[#bbcca9]"></div>
-                <div className="w-2 h-2 rounded-full bg-[#bbcca9]/60"></div>
-                <div className="w-2 h-2 rounded-full bg-[#bbcca9]/30"></div>
+              <div className="flex gap-2 mt-auto">
+                <span className="px-3 py-1 bg-white/5 rounded-md text-xs font-mono text-[#bbcca9] border border-white/5 gap-1 flex items-center"><span className="material-symbols-outlined text-[14px]">memory</span> Microservices</span>
               </div>
             </motion.div>
 
@@ -151,16 +250,22 @@ export default function Home() {
             <motion.div 
               whileHover={{ y: -8, scale: 1.01 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className={`md:col-span-2 bg-surface-container-highest rounded-xl p-10 flex flex-col md:flex-row gap-8 items-center reveal delay-400 cursor-pointer hover:shadow-2xl hover:bg-surface-container border border-transparent hover:border-outline/20 transition-all duration-300 ${stackInView ? 'in-view' : ''}`}
+              className={`col-span-2 bg-surface-container-highest rounded-xl p-10 flex flex-col md:flex-row gap-8 items-center reveal delay-400 cursor-pointer hover:shadow-2xl hover:bg-surface-container border border-transparent hover:border-outline/20 transition-all duration-300 ${stackInView ? 'in-view' : ''}`}
             >
-              <div className="flex-1">
-                <h3 className="font-headline text-3xl font-extrabold mb-4">Product Engineering</h3>
-                <p className="text-on-surface-variant text-lg leading-relaxed">
+              <div className="flex-1 flex flex-col h-full">
+                <div className="flex items-start justify-between mb-8">
+                  <div className="w-16 h-16 bg-tertiary-container/30 rounded-2xl flex items-center justify-center border border-tertiary/20">
+                    <span className="material-symbols-outlined text-tertiary text-3xl">handyman</span>
+                  </div>
+                  <span className="px-4 py-2 bg-surface-container-low rounded-full text-xs font-bold shadow-sm text-tertiary whitespace-nowrap block">Product</span>
+                </div>
+                <h3 className="font-headline text-3xl font-extrabold mb-4 text-on-surface mt-auto">Product Engineering</h3>
+                <p className="text-on-surface-variant text-lg leading-relaxed mb-auto">
                   We don't just write code; we build products. Our engineers are trained in UX/UI and product strategy to ensure every line of code serves the user.
                 </p>
               </div>
-              <div className="w-full md:w-1/3">
-                <img className="rounded-lg shadow-xl aspect-square object-cover" alt="designer drafting wireframes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAse2ZQPE9unMByv3sNU9JfSSw6Bqtv8QgtQ_lKVzyLFFy1n6xNXHAFsBKcQl5sHxf-wPS5qAx_55_LwwxJXBRrPgDwP6kQxq7cD6DigtwBq2exDoCNrSoPfDD6mTlqVxRkBzP7ZBDBpBMsQ2WISNGq8h6JKradZlp6qKEkSNipxJUAZpyy9sQHH1pGt58QT__yCl7f1_W7MmqTVSt4-AiIMohhltQKj8qi_h2KPPeo8lE6-fvsb7s3fTb5F0CsZRAzaNFRcvN9SqBF" />
+              <div className="w-full md:w-1/3 h-full">
+                 <img className="rounded-xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] bg-black aspect-[4/3] object-cover w-full h-full opacity-80 mix-blend-luminosity" alt="designer drafting wireframes" src="https://images.unsplash.com/photo-1618761714954-0b8cd0026356?auto=format&fit=crop&q=80&w=600" />
               </div>
             </motion.div>
           </div>

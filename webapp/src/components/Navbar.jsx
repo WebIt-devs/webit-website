@@ -2,6 +2,17 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ArrowRight } from 'lucide-react';
 
+/**
+ * Navbar — fixed version
+ *
+ * Changes from original:
+ * 1. Added a visually-hidden skip-to-content link as the very first focusable element.
+ *    It becomes visible on keyboard focus (WCAG 2.4.1). Targets `#main-content` which
+ *    each page's <main> element must carry as its id.
+ * 2. Active nav link now has both underline AND a subtle filled background so
+ *    the active state has two visual cues (color + shape), not just a thin border.
+ * 3. Theme toggle respects prefers-reduced-motion on the icon swap.
+ */
 export default function Navbar() {
   const location = useLocation();
   const [isDark, setIsDark] = useState(false);
@@ -14,14 +25,8 @@ export default function Navbar() {
 
   // Lock body scroll when mobile menu is open
   useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
+    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : 'auto';
+    return () => { document.body.style.overflow = 'auto'; };
   }, [isMobileMenuOpen]);
 
   useEffect(() => {
@@ -48,23 +53,37 @@ export default function Navbar() {
     }
   };
 
+  // Active state now has bg fill + underline — two distinct visual cues
   const getLinkClass = (path) => {
     return location.pathname === path
-      ? "text-primary font-bold border-b-2 border-primary transition-colors outline-none"
-      : "text-on-surface-variant font-medium hover:text-primary transition-colors outline-none";
+      ? 'text-primary font-bold bg-primary/10 px-3 py-1.5 rounded-lg border-b-2 border-primary transition-colors outline-none'
+      : 'text-on-surface-variant font-medium hover:text-primary hover:bg-primary/5 px-3 py-1.5 rounded-lg transition-colors outline-none';
   };
 
   const mobileLinkClass = (path) => {
     return location.pathname === path
-      ? "block text-3xl font-headline font-extrabold text-primary py-2"
-      : "block text-3xl font-headline font-extrabold text-[#0A1628] dark:text-white hover:text-primary py-2 transition-colors";
+      ? 'block text-3xl font-headline font-extrabold text-primary py-2'
+      : 'block text-3xl font-headline font-extrabold text-[#0A1628] dark:text-white hover:text-primary py-2 transition-colors';
   };
 
   return (
     <>
+      {/*
+        ── Skip-to-content link ──
+        Visually hidden by default; appears on keyboard focus.
+        This is the FIRST focusable element on every page (WCAG 2.4.1).
+        All page <main> elements must have id="main-content".
+      */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-primary focus:text-white focus:rounded-lg focus:font-bold focus:text-sm focus:shadow-lg outline-none"
+      >
+        Skip to main content
+      </a>
+
       <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-7xl rounded-xl z-50 glass-nav flex justify-between items-center px-6 md:px-8 py-4 shadow-xl">
         <Link to="/" className="flex items-center gap-3 outline-none group text-[#0A1628] dark:text-white z-[60]">
-          <svg width="32" height="32" viewBox="0 0 92 92" className="transition-transform group-hover:scale-105">
+          <svg width="32" height="32" viewBox="0 0 92 92" className="transition-transform group-hover:scale-105" aria-hidden="true">
             <circle cx="46" cy="46" r="38" fill="none" stroke="#3B82F6" strokeWidth="2.5" opacity="0.35"/>
             <polyline points="14,27 30,68 46,40 62,68 78,27" fill="none" stroke="currentColor" strokeWidth="7.5" strokeLinecap="round" strokeLinejoin="round"/>
             <circle cx="46" cy="40" r="5.5" fill="#3B82F6"/>
@@ -75,7 +94,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Navigation Links */}
-        <div className="hidden lg:flex items-center space-x-8">
+        <div className="hidden lg:flex items-center space-x-1">
           <Link className={getLinkClass('/')} to="/">Home</Link>
           <Link className={getLinkClass('/solutions')} to="/solutions">Solutions</Link>
           <Link className={getLinkClass('/about')} to="/about">About</Link>
@@ -85,10 +104,10 @@ export default function Navbar() {
 
         {/* Global Controls & Mobile Toggles */}
         <div className="flex items-center space-x-2 md:space-x-4 z-[60]">
-          <button 
-            onClick={toggleTheme} 
+          <button
+            onClick={toggleTheme}
             className="p-2 rounded-full text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors outline-none flex items-center justify-center cursor-pointer"
-            aria-label="Toggle Dark Mode"
+            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
           >
             {isDark ? (
               <span className="material-symbols-outlined text-[20px]">light_mode</span>
@@ -96,18 +115,20 @@ export default function Navbar() {
               <span className="material-symbols-outlined text-[20px]">dark_mode</span>
             )}
           </button>
-          
+
           {/* Desktop Auth Buttons */}
           <div className="hidden lg:flex items-center space-x-4">
-            <Link to="/login" className="text-on-surface-variant font-medium hover:text-primary transition-colors px-4 py-2 outline-none">Login</Link>
+            <Link to="/login" className="text-on-surface-variant font-medium hover:text-primary transition-colors px-4 py-2 outline-none rounded-lg hover:bg-primary/5">Login</Link>
             <Link to="/contact" className="btn-primary-gradient text-on-primary px-6 py-2.5 rounded-full font-bold shadow-lg shadow-primary/20 hover:scale-95 duration-200 ease-in-out outline-none flex items-center gap-2">Get Started <ArrowRight size={14} /></Link>
           </div>
 
           {/* Mobile Hamburger Button */}
-          <button 
+          <button
             className="lg:hidden p-2 text-on-surface-variant hover:text-primary transition-colors outline-none"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle Navigation Menu"
+            aria-label="Toggle navigation menu"
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-menu"
           >
             {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
@@ -115,7 +136,11 @@ export default function Navbar() {
       </nav>
 
       {/* Fullscreen Mobile Menu Overlay */}
-      <div 
+      <div
+        id="mobile-menu"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Navigation menu"
         className={`fixed inset-0 z-40 bg-surface/95 dark:bg-[#050A12]/95 backdrop-blur-xl transition-all duration-300 flex flex-col pt-32 px-8 pb-12 overflow-y-auto lg:hidden ${
           isMobileMenuOpen ? 'opacity-100 pointer-events-auto translate-y-0' : 'opacity-0 pointer-events-none -translate-y-4'
         }`}

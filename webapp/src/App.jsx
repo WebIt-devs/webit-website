@@ -15,9 +15,27 @@ import NotFound from './pages/NotFound';
 import ScrollToTop from './components/ScrollToTop';
 import CustomCursor from './components/CustomCursor';
 
+/**
+ * App — fixed version
+ *
+ * Changes from original:
+ * 1. SmoothScroll (Lenis) is disabled for users who prefer reduced motion.
+ *    Lenis overrides native scroll behaviour; for vestibular/motion-sensitive
+ *    users this can cause nausea. When prefers-reduced-motion: reduce is set,
+ *    we skip the SmoothScroll wrapper entirely and use native browser scroll.
+ *
+ * Note: every page <main> element should carry id="main-content" to support
+ * the skip-to-content link added in Navbar. The fixed Contact.jsx already
+ * does this — apply the same to Home, About, Services, Solutions, Careers, etc.
+ */
+
+const prefersReducedMotion =
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 function App() {
-  return (
-    <SmoothScroll>
+  const content = (
+    <>
       <CustomCursor />
       <Router>
         <ScrollToTop />
@@ -36,8 +54,15 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
-    </SmoothScroll>
+    </>
   );
+
+  // Skip Lenis smooth scroll for users who have requested reduced motion
+  if (prefersReducedMotion) {
+    return content;
+  }
+
+  return <SmoothScroll>{content}</SmoothScroll>;
 }
 
 export default App;

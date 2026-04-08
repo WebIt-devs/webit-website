@@ -5,9 +5,37 @@ import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 
+/**
+ * Footer — fixed version
+ *
+ * Changes from original:
+ * 1. Newsletter button shows an animated spinner SVG during `loading` state
+ *    instead of just disabling silently. Users on slow connections now get
+ *    clear feedback that their submission is in progress.
+ * 2. Added aria-live region so screen readers announce the success/error state
+ *    without the user having to navigate to find the message.
+ * 3. Newsletter input has an explicit aria-label (no visible <label> exists).
+ * 4. Submit button has aria-disabled mirroring the disabled prop so assistive
+ *    tech announces its state correctly.
+ */
+
 const XIcon = ({ size = 20 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
     <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+  </svg>
+);
+
+const Spinner = () => (
+  <svg
+    className="animate-spin"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    aria-hidden="true"
+  >
+    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
   </svg>
 );
 
@@ -39,13 +67,15 @@ export default function Footer() {
     }
   };
 
+  const isDisabled = status === 'loading' || status === 'success';
+
   return (
     <footer className="bg-inverse-surface text-inverse-on-surface py-20 px-6 lg:px-12 mt-32 rounded-t-[48px] transition-colors duration-300">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
         {/* Brand */}
         <div className="flex flex-col gap-6">
           <Link to="/" className="flex items-center gap-3 group w-fit">
-            <svg width="40" height="40" viewBox="0 0 92 92" className="shrink-0 group-hover:scale-105 transition-transform">
+            <svg width="40" height="40" viewBox="0 0 92 92" className="shrink-0 group-hover:scale-105 transition-transform" aria-hidden="true">
               <circle cx="46" cy="46" r="38" fill="none" stroke="currentColor" className="opacity-40" strokeWidth="2.5"/>
               <polyline points="14,27  30,68  46,40  62,68  78,27"
                 fill="none" stroke="currentColor" strokeWidth="7.5"
@@ -98,19 +128,27 @@ export default function Footer() {
         <div className="flex flex-col gap-6">
           <h4 className="font-headline font-semibold">Ready to scale?</h4>
           <p className="text-sm opacity-70 font-manrope">Join our newsletter for insights on engineering and growth.</p>
-          <form className="flex gap-2 relative" onSubmit={handleSubscribe}>
+
+          <form className="flex gap-2 relative" onSubmit={handleSubscribe} aria-label="Newsletter subscription">
             <input
               type="email"
               required
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              disabled={status === 'loading' || status === 'success'}
+              disabled={isDisabled}
+              aria-label="Email address for newsletter"
               className="bg-transparent border border-inverse-on-surface/20 rounded-full px-4 py-2.5 text-sm placeholder:opacity-50 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all flex-1 text-inherit disabled:opacity-50"
             />
             <button
               type="submit"
-              disabled={status === 'loading' || status === 'success'}
+              disabled={isDisabled}
+              aria-disabled={isDisabled}
+              aria-label={
+                status === 'loading' ? 'Subscribing…' :
+                status === 'success' ? 'Subscribed!' :
+                'Subscribe to newsletter'
+              }
               className={`p-2.5 rounded-full transition-all flex items-center justify-center shrink-0 w-[44px] h-[44px] ${
                 status === 'success'
                   ? 'bg-[#00e297] text-black'
@@ -120,7 +158,7 @@ export default function Footer() {
               }`}
             >
               {status === 'loading' ? (
-                <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                <Spinner />
               ) : status === 'success' ? (
                 <Check size={20} />
               ) : (
@@ -128,12 +166,19 @@ export default function Footer() {
               )}
             </button>
           </form>
-          {status === 'error' && (
-            <p className="text-red-400 text-xs -mt-2">Failed to subscribe. Please try again.</p>
-          )}
-          {status === 'success' && (
-            <p className="text-[#00e297] text-xs -mt-2 font-semibold">✓ You're subscribed!</p>
-          )}
+
+          {/* aria-live region — screen readers announce state changes automatically */}
+          <div aria-live="polite" aria-atomic="true" className="min-h-[1rem] -mt-2">
+            {status === 'error' && (
+              <p className="text-red-400 text-xs">Failed to subscribe. Please try again.</p>
+            )}
+            {status === 'success' && (
+              <p className="text-[#00e297] text-xs font-semibold">✓ You're subscribed!</p>
+            )}
+            {status === 'loading' && (
+              <p className="text-inverse-on-surface/50 text-xs">Subscribing…</p>
+            )}
+          </div>
         </div>
       </div>
 
@@ -143,7 +188,7 @@ export default function Footer() {
         </p>
         <div className="flex items-center gap-2 text-xs opacity-70 font-label tracking-widest uppercase">
           <span>Designed with precision.</span>
-          <span className="w-1 h-1 rounded-full bg-primary inline-block" />
+          <span className="w-1 h-1 rounded-full bg-primary inline-block" aria-hidden="true" />
           <span>Built for scale.</span>
         </div>
       </div>

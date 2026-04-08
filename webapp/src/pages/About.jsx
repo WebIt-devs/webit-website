@@ -9,9 +9,9 @@ const pageVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
 };
 
-import farisImg from '../assets/Muhammed-faris.png';
-import fazeenImg from '../assets/Fazeen-Alan.png';
-import abinavImg from '../assets/Abinav-punnakan.png';
+import farisImg from '../assets/Muhammed-faris.webp';
+import fazeenImg from '../assets/Fazeen-Alan.webp';
+import abinavImg from '../assets/Abinav-punnakan.webp';
 
 export default function About() {
   const [heroRef, heroInView]       = useInView({ threshold: 0.15 });

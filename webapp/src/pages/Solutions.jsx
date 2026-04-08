@@ -171,7 +171,7 @@ export default function Solutions() {
               </span>
               <h2 className="font-headline text-4xl md:text-5xl font-extrabold text-on-surface mb-6 leading-tight">
                 Any Industry. Any Scale. <br/>
-                <span className="text-primary-container italic">Secured by Design.</span>
+                <span className="text-primary-container ">Secured by Design.</span>
               </h2>
             </div>
 
